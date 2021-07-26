@@ -9,12 +9,13 @@ from .models import Client, Worker, User, RequestedService, WorkerPortfolio, Wor
 from .serializers import ClientRegistrationSerializer, \
     WorkerRegistrationSerializer, UserSerializer, WorkerSerializer, PortfolioSerializer, ServiceSerializer, \
     WorkerPhotoSerializer, PhotoSerializer, ResponseSerializer, ResponseRegSerializer, WorkerPriceSerializer, \
-    WorkerPriceCreationSerializer, FeedbackSerializer, GetFeedbackSerializer
+    WorkerPriceCreationSerializer, FeedbackSerializer, GetFeedbackSerializer, AverageCostSerializer, \
+    ServiceConfirmSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 
-class ClientRegistrationAPIView(APIView):
+class ClientRegistrationAPIView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = ClientRegistrationSerializer
 
@@ -30,7 +31,7 @@ class ClientRegistrationAPIView(APIView):
             return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class WorkerRegistrationAPIView(APIView):
+class WorkerRegistrationAPIView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = WorkerRegistrationSerializer
 
@@ -46,7 +47,7 @@ class WorkerRegistrationAPIView(APIView):
             return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ResponseRegAPIView(APIView):
+class ResponseRegAPIView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = ResponseRegSerializer
 
@@ -64,8 +65,9 @@ class ResponseRegAPIView(APIView):
         return Response(response)
 
 
-class RequestAverageCostAPI(APIView):
+class RequestAverageCostAPI(generics.CreateAPIView):
     permission_classes = [AllowAny]
+    serializer_class = AverageCostSerializer
 
     def post(self, request):
         workload = request.data['workload']
@@ -79,7 +81,9 @@ class RequestAverageCostAPI(APIView):
             total = total + obj.price
 
         avg = total/count
-        new_workload = workload*avg
+        print(type(avg))
+        print(type(workload))
+        new_workload = int(workload)*avg
         response = {
             'average_price': avg,
             'avg_for_workload': new_workload
@@ -88,13 +92,13 @@ class RequestAverageCostAPI(APIView):
 
 
 
-class ResponseConfirmAPI(APIView):
+class ResponseConfirmAPI(generics.CreateAPIView):
     permission_classes = [AllowAny]
+    serializer_class = ServiceConfirmSerializer
 
     def post(self, request):
-        # worker = Worker.objects.get(id=request.worker_id)
-        service = RequestedService.objects.filter(id=request.data['request_id']).update(
-            worker=request.data['worker_id'], status=True)
+        service = RequestedService.objects.filter(id=request.data['request']).update(
+            worker=request.data['worker'], status=True)
         status_code = status.HTTP_201_CREATED
         response = {
             'success': 'True',

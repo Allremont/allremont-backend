@@ -1,6 +1,8 @@
 from django.urls import path, re_path
 from .views import *
 
+#todo написать подробную документацию по апишкам связанных с фотографиями
+
 urlpatterns = [
     path('worker/add/', WorkerRegistrationAPIView.as_view(), name='worker_registration'),
     path('client/add/', ClientRegistrationAPIView.as_view(), name='client_registration'),

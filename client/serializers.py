@@ -166,3 +166,16 @@ class GetFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = '__all__'
+
+
+class AverageCostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RequestedService
+        fields = ['workload', 'sub_category']
+
+
+class ServiceConfirmSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Response
+        fields = ['request', 'worker']
