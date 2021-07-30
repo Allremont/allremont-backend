@@ -1,4 +1,3 @@
-from django.db.models import Avg
 from rest_framework import serializers
 from .models import User, Client, Worker, RequestedService, RequestPhoto, Response, WorkerPrice, Feedback
 
@@ -35,7 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'password', 'last_login', 'is_superuser', 'username', 'first_name', 'last_name', 'is_staff',
-                  'is_active', 'date_joined', 'is_client', 'is_worker', 'email',]
+                  'is_active', 'date_joined', 'is_client', 'is_worker', 'email', ]
 
 
 class UserRespSerializer(serializers.ModelSerializer):
@@ -65,7 +64,6 @@ class WorkerSerializer(serializers.ModelSerializer):
         requests = RequestedService.objects.filter(worker=obj, status=True).count()
         return requests
 
-
     def get_worker_feedback(self, obj):
         ser = GetFeedbackSerializer
         return ser(Feedback.objects.filter(worker=obj), many=True).data
@@ -73,6 +71,7 @@ class WorkerSerializer(serializers.ModelSerializer):
     def get_worker_price(self, obj):
         ser = WorkerPriceSerializer
         return ser(obj.worker_price, many=True).data
+
 
 class WorkerRespSerializer(serializers.ModelSerializer):
     user = UserRespSerializer()
@@ -133,7 +132,6 @@ class WorkerPriceSerializer(serializers.ModelSerializer):
 
 
 class WorkerPriceCreationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = WorkerPrice
         fields = '__all__'
@@ -154,7 +152,6 @@ class ClientSerializer(serializers.ModelSerializer):
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Feedback
         fields = '__all__'
@@ -169,7 +166,6 @@ class GetFeedbackSerializer(serializers.ModelSerializer):
 
 
 class AverageCostSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = RequestedService
         fields = ['workload', 'sub_category']

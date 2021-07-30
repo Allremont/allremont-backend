@@ -11,25 +11,31 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 from datetime import timedelta
 import os
-import dj_database_url
-import django_heroku
+from pathlib import Path
+
 from django.conf import settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '4(yxjyfgsy$2zun)ylhk@2vya3pl7a(#p**n+&4+trh8&y3&qh'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 ALLOWED_HOSTS = ['*']
 
+ALLOWED_HOSTS.extend(
+    filter(
+        None,
+        os.environ.get('ALLOWED_HOSTS', '').split(','),
+    )
+)
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,7 +49,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'drf_yasg',
-    'whitenoise.runserver_nostatic',
     'corsheaders',
 ]
 
@@ -87,22 +92,25 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'allremont',
+        'NAME': os.environ.get('DB_NAME'),
 
-        'USER': 'postgres',
+        'USER': os.environ.get('DB_USER'),
 
-        'PASSWORD': 'postgres',
+        'PASSWORD': os.environ.get('DB_PASS'),
 
-        'HOST': 'localhost',
+        'HOST': os.environ.get('DB_HOST'),
 
         'PORT': '5432',
     }
 }
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
+STATIC_URL = '/static/static/'
+MEDIA_URL = '/static/media/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, '/vol/web/media')
+STATIC_ROOT = os.path.join(BASE_DIR, '/vol/web/static')
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -145,13 +153,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 AUTH_USER_MODEL = 'client.User'
 
@@ -184,15 +185,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-
-django_heroku.settings(locals())
-
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "https://allremont-frontend.herokuapp.com"
 ]
-

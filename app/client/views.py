@@ -1,18 +1,11 @@
-from django.db.models import Avg
-from rest_framework import status, generics, filters, viewsets
+from rest_framework import status, generics, filters
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from .models import Client, Worker, User, RequestedService, WorkerPortfolio, WorkerPortfolioPhoto, RequestPhoto, \
-    Response as Resp, WorkerPrice, Categories, SubCategories, Feedback
-from .serializers import ClientRegistrationSerializer, \
-    WorkerRegistrationSerializer, UserSerializer, WorkerSerializer, PortfolioSerializer, ServiceSerializer, \
-    WorkerPhotoSerializer, PhotoSerializer, ResponseSerializer, ResponseRegSerializer, WorkerPriceSerializer, \
-    WorkerPriceCreationSerializer, FeedbackSerializer, GetFeedbackSerializer, AverageCostSerializer, \
-    ServiceConfirmSerializer
+    Response as Resp, WorkerPrice, SubCategories, Feedback
+from .serializers import *
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
 
 
 class ClientRegistrationAPIView(generics.CreateAPIView):
@@ -80,16 +73,15 @@ class RequestAverageCostAPI(generics.CreateAPIView):
             count = count + 1
             total = total + obj.price
 
-        avg = total/count
+        avg = total / count
         print(type(avg))
         print(type(workload))
-        new_workload = int(workload)*avg
+        new_workload = int(workload) * avg
         response = {
             'average_price': avg,
             'avg_for_workload': new_workload
         }
         return Response(response)
-
 
 
 class ResponseConfirmAPI(generics.CreateAPIView):
