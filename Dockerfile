@@ -29,6 +29,7 @@ RUN groupadd --gid 2000 app && \
     chmod -R 777 /vol && \
     chmod -R 777 /vol/web/static/admin && \
     chmod -R 777 /vol/web/media && \
+    chmod -R 777 /app/client && \
     chmod -R 777 /app/vol &&\
     chmod +x /scripts
 
