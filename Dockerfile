@@ -21,13 +21,15 @@ RUN groupadd --gid 2000 app && \
     usermod -aG sudo app && \
     mkdir -p /vol/web/static && \
     mkdir -p /vol/web/static/admin && \
+    mkdir -p /app/vol && \
     mkdir -p /vol/web/media \
     chown app:app /vol && \
     chown -R 2001:2001 /vol/web/static/admin && \
-    chown -R app:app /vol && \
+    chown -R 777 app:app /vol && \
     chmod -R 777 /vol && \
     chmod -R 777 /vol/web/static/admin && \
     chmod -R 777 /vol/web/media && \
+    chmod -R 777 /app/vol &&\
     chmod +x /scripts
 
 RUN chmod +x /scripts/run.sh
