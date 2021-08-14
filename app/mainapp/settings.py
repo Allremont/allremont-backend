@@ -106,11 +106,11 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-STATIC_URL = '/static/'
+STATIC_URL = '/static/static/'
 MEDIA_URL = '/static/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'vol/web/media')
-STATIC_ROOT = os.path.join(BASE_DIR, 'vol/web/static')
+MEDIA_ROOT = '/vol/web/static/media'
+STATIC_ROOT = '/vol/web/static'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
