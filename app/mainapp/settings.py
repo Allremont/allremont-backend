@@ -106,10 +106,16 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
+# STATIC_URL = '/static/static/'
+# MEDIA_URL = '/static/media/'
+#
+# MEDIA_ROOT = '/vol/web/static/media'
+# STATIC_ROOT = '/vol/web/static'
+
 STATIC_URL = '/static/static/'
 MEDIA_URL = '/static/media/'
 
-MEDIA_ROOT = '/vol/web/static/media'
+MEDIA_ROOT = '/vol/web/media'
 STATIC_ROOT = '/vol/web/static'
 
 AUTH_PASSWORD_VALIDATORS = [
