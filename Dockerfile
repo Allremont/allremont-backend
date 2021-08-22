@@ -13,7 +13,6 @@ EXPOSE 8000
 
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
-    /py/bin/pip install uwsgi && \
     /py/bin/pip install -r /requirements.txt
 
 RUN chmod -R 777 /app/client && \

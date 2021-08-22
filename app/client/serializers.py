@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Client, Worker, RequestedService, RequestPhoto, Response, WorkerPrice, Feedback
+from .models import User, Client, Worker, RequestedService, RequestPhoto, Response, WorkerPrice, Feedback, SubMaterials
 
 from .models import Categories, WorkerPortfolio, WorkerPortfolioPhoto
 
@@ -175,3 +175,9 @@ class ServiceConfirmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Response
         fields = ['request', 'worker']
+
+
+class SubmaterialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubMaterials
+        fields = ['material', 'title', 'price', 'image_url', 'available_amount', ]

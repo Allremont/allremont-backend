@@ -32,6 +32,11 @@ urlpatterns = [
 urlpatterns += [
     path('admin/', admin.site.urls),
 ]
+
+urlpatterns += [
+    path('dashboard/', include('client.urls')),
+]
+
 urlpatterns += doc_urls
 
 if settings.DEBUG:
